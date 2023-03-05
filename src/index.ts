@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express'
-import {schedule} from "../api/mock";
+import path from "path";
+import { schedule } from "../api/mock";
 
 const app = express()
 const port = process.env.PORT || 8080
 
+app.use(express.static('public'))
+
 app.get('/', (_req: Request, res: Response) => {
-    return res.send('Express Typescript on Vercel')
+    return res.sendFile('index.html', {root: path.join(__dirname, 'public')});
 })
 
 app.get('/api/schedule', (req: Request, res: Response) => {
