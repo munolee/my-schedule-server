@@ -14,12 +14,11 @@ app.get('/', (_req: Request, res: Response) => {
 })
 
 // Swagger UI 미들웨어 적용
-const swaggerSpec: any = YAML.load(path.join(__dirname, './swagger.yaml'));
+const swaggerSpec = YAML.load(path.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // /api 엔드포인트에 요청이 들어오면 api 폴더로 분기
 app.use('/api', require('./api'));
-
 
 app.listen(port, () => {
     return console.log(`App is listening on port ${port} !`)
