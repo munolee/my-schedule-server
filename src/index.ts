@@ -2,7 +2,7 @@ import express, { Application } from 'express'
 import schedule from "../api/schedule";
 
 const app: Application = express()
-const port: number = 3001
+const port = process.env.PORT || 8080
 
 app.use('/api/schedule', schedule);
 
