@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import path from "path";
-import { schedule } from "../api/mock";
+import { schedule } from "./mock";
 
 const app = express()
 const port = process.env.PORT || 8080
