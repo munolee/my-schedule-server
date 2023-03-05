@@ -2,7 +2,7 @@
   "name": "schdule-express",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "start": "nodemon src/index.ts",
     "build": "rimraf dist && tsc",
