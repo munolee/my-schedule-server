@@ -1,9 +1,12 @@
 import express, { Request, Response } from 'express'
 import path from "path";
+import cors from 'cors';
 import { schedule } from "./mock";
+
 
 const app = express()
 const port = process.env.PORT || 8080
+app.use(cors())
 
 app.use(express.static('public'))
 
