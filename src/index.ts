@@ -4,6 +4,10 @@ import schedule from "../api/schedule";
 const app: Application = express()
 const port = process.env.PORT || 8080
 
+app.get('/', (_req: Request, res: Response) => {
+    return res.send('Express Typescript on Vercel')
+})
+
 app.get('/api/schedule', (req: Request, res: Response) => {
     res.json(schedule);
 })

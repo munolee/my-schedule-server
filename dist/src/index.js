@@ -7,6 +7,9 @@ const express_1 = __importDefault(require("express"));
 const schedule_1 = __importDefault(require("../api/schedule"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8080;
+app.get('/', (_req, res) => {
+    return res.send('Express Typescript on Vercel');
+});
 app.get('/api/schedule', (req, res) => {
     res.json(schedule_1.default);
 });
