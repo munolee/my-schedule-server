@@ -1,0 +1,8 @@
+/api/schedule:
+  get:
+    tags:
+      - /schedule
+    summary: schedule list
+    responses:
+      '200':
+        $ref: './openapi.yaml#/components/responses/successResponse'

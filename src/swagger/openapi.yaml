@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: Event Schedule API
+  description: My API with Swagger
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/
+paths:
+  /api/schedule:
+    $ref: './schedule.yaml#/~1api~1schedule'
+components:
+  responses:
+    successResponse:
+      description: successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              startDate:
+                type: string
+              endDate:
+                type: string
+              eventTitle:
+                type: string
+              typeId:
+                type: integer
+              bgColor:
+                type: string
