@@ -11,6 +11,9 @@
     {
       "src": "/(.*)",
       "dest": "dist/index.js"
+    }, {
+      "src": "/",
+      "dest": "/public/index.html"
     }
   ]
 }
