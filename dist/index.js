@@ -20,6 +20,9 @@ const swaggerSpec = yamljs_1.default.load(path_1.default.join(__dirname, './swag
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
 // /api 엔드포인트에 요청이 들어오면 api 폴더로 분기
 app.use('/api', require('./api'));
+app.all('*', (req, res) => {
+    res.status(404).send('<h1> 요청 페이지 없음 </h1>');
+});
 app.listen(port, () => {
     return console.log(`App is listening on port ${port} !`);
 });
