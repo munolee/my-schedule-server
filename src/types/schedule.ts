@@ -1,16 +1,17 @@
 export type ScheduleType = {
-    startDate: string;
-    endDate: string;
-    eventTitle: string;
-    typeId: number;
-    bgColor: string;
-}
+  _id: string;
+  startDate: string;
+  endDate: string;
+  eventTitle: string;
+  typeId: number;
+  bgColor: string;
+};
 
 export type HolidayJsonType = {
-    dateKind: number;
-    dateName: string;
-    isHoliday: string;
-    locdate: number;
-    seq: number;
-    remarks?: string;
-}
+  dateKind: number;
+  dateName: string;
+  isHoliday: string;
+  locdate: number;
+  seq: number;
+  remarks?: string;
+};
