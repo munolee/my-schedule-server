@@ -18,7 +18,7 @@ client
 
 const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}`;
 
-/** /api/schedule Endpoint **/
+/** /api/schedule Get Endpoint **/
 router.get('/', async (req: Request, res: Response) => {
   // DB 스케쥴 데이터 불러오기
   const schedule = await client
@@ -69,6 +69,19 @@ router.get('/', async (req: Request, res: Response) => {
       }
     }
   );
+});
+
+/** /api/schedule Post Endpoint **/
+router.post('/', async (req: Request, res: Response) => {
+  const result = await client
+    .db('schedule')
+    .collection<ScheduleType>('schedule')
+    .insertOne({
+      ...req.body,
+    })
+    .then(() => console.log('성공적으로 등록되었습니다.'))
+    .catch((error) => console.error(error));
+  return res.json(result);
 });
 
 module.exports = router;

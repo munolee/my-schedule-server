@@ -1,9 +1,10 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
-import path from 'path';
-import YAML from 'yamljs';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
+import path from 'path';
+import YAML from 'yamljs';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -17,6 +18,9 @@ app.get('/', (_req: Request, res: Response) => {
 // Swagger UI 미들웨어 적용
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// config bodyParser
+app.use(bodyParser.json());
 
 // /api 엔드포인트에 요청이 들어오면 api 폴더로 분기
 app.use('/api', require('./api'));
