@@ -34,49 +34,44 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         .collection('schedule')
         .find()
         .toArray();
-    return res.json(schedule);
     // 공공 데이터 포탈 공휴일 데이터 요청 보내기
-    // const year = req.query.year || '2023';
-    // request(
-    //   url + `&solYear=${year}`,
-    //   async (error: Error, response: Response, body: string | Buffer) => {
-    //     try {
-    //       await new Promise(() => {
-    //         const holidayJson = parser.parse(body).response.body.items.item;
-    //
-    //         // 가져온 데이터를 형식에 맞게 파싱하기
-    //         const holidaySchedule: ScheduleType[] = Object.values(
-    //           holidayJson
-    //         ).map((data: HolidayJsonType) => {
-    //           return {
-    //             _id: '',
-    //             startDate: (data?.locdate)
-    //               .toString()
-    //               .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-    //             endDate: (data?.locdate)
-    //               .toString()
-    //               .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-    //             eventTitle: data?.dateName,
-    //             typeId: 2,
-    //             bgColor: '#EDAA7D',
-    //           };
-    //         });
-    //
-    //         // DB 데이터와 병합, 정렬 후 데이터 내보내기
-    //         const schedules = [...holidaySchedule, ...schedule].sort((a, b) => {
-    //           if (a.startDate >= b.startDate) return 1;
-    //           if (a.endDate >= b.endDate) return -1;
-    //           return -1;
-    //         });
-    //         return res.json(schedules);
-    //       });
-    //     } catch (error) {
-    //       console.error(error);
-    //       // 에러 발생 시 Mock 데이터만 내보내기
-    //       return res.json(schedule);
-    //     }
-    //   }
-    // );
+    const year = req.query.year || '2023';
+    request(`${url}&solYear=${year}`, (error, response, body) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            yield new Promise(() => {
+                const holidayJson = parser.parse(body).response.body.items.item;
+                // 가져온 데이터를 형식에 맞게 파싱하기
+                const holidaySchedule = Object.values(holidayJson).map((data) => {
+                    return {
+                        _id: '',
+                        startDate: (data === null || data === void 0 ? void 0 : data.locdate)
+                            .toString()
+                            .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        endDate: (data === null || data === void 0 ? void 0 : data.locdate)
+                            .toString()
+                            .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        eventTitle: data === null || data === void 0 ? void 0 : data.dateName,
+                        typeId: 2,
+                        bgColor: '#EDAA7D',
+                    };
+                });
+                // DB 데이터와 병합, 정렬 후 데이터 내보내기
+                const schedules = [...holidaySchedule, ...schedule].sort((a, b) => {
+                    if (a.startDate >= b.startDate)
+                        return 1;
+                    if (a.endDate >= b.endDate)
+                        return -1;
+                    return -1;
+                });
+                return res.json(schedules);
+            });
+        }
+        catch (error) {
+            console.error(error);
+            // 에러 발생 시 DB 데이터만 내보내기
+            return res.json(schedule);
+        }
+    }));
 }));
 module.exports = router;
 //# sourceMappingURL=schedule.js.map
