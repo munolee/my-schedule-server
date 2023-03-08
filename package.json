@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.ts",
-    "build": "rm -rf dist && mkdir dist && cp -r src/swagger.yaml dist/swagger.yaml && tsc",
+    "build": "rm -rf dist && mkdir dist && cp -r src/swagger.yaml dist/swagger.yaml && cp -r public/index.html dist/index.html && tsc",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
     "api-docs": "swagger-cli bundle ./src/swagger/openapi.yaml --outfile src/swagger.yaml --type yaml",
