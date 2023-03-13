@@ -5,6 +5,7 @@ export interface ScheduleType {
   eventTitle: string;
   typeId: number;
   bgColor: string;
+  userId?: string;
 }
 
 export interface HolidayJsonType {

@@ -18,10 +18,6 @@ const auth_1 = require("../middlewares/auth");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
 const authJwt = require('../middlewares/authJwt');
-/** /api/auth Get Endpoint **/
-router.get('/', authJwt, (req, res, next) => {
-    res.send(req.session);
-});
 /** /api/auth/login Post Endpoint **/
 router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     passport_1.default.authenticate('local', (err, user, info) => {
@@ -59,8 +55,12 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
 /** /api/auth/logout Post Endpoint **/
 router.post('/logout', authJwt, (req, res) => {
     req.session.destroy(() => {
-        res.redirect('/');
+        return res.redirect('/');
     });
+});
+/** /api/auth Get Endpoint **/
+router.get('/', (req, res, next) => {
+    return res.send(req.session);
 });
 module.exports = router;
 //# sourceMappingURL=auth.js.map

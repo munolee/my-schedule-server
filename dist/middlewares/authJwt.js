@@ -6,14 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authJwt = (req, res, next) => {
     if (req.headers.authorization) {
-        // header에서 access token을 가져옵니다.
         const token = req.headers.authorization.split('Bearer ')[1];
         try {
-            // token을 검증합니다.
+            // token 검증
             const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_KEY);
             if (decoded) {
-                // 로그인 성공 시 다음 메서드 실행
-                next();
+                res.locals.id = decoded.id;
+                next(); // 로그인 성공 시 다음 메서드 실행
             }
         }
         catch (err) {

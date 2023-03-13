@@ -7,11 +7,6 @@ import jwt from 'jsonwebtoken';
 const router: Router = express.Router();
 const authJwt = require('../middlewares/authJwt');
 
-/** /api/auth Get Endpoint **/
-router.get('/', authJwt, (req, res, next) => {
-  res.send(req.session);
-});
-
 /** /api/auth/login Post Endpoint **/
 router.post('/login', isNotLoggedIn, async (req, res, next) => {
   passport.authenticate(
@@ -57,8 +52,13 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
 /** /api/auth/logout Post Endpoint **/
 router.post('/logout', authJwt, (req, res) => {
   req.session.destroy(() => {
-    res.redirect('/');
+    return res.redirect('/');
   });
+});
+
+/** /api/auth Get Endpoint **/
+router.get('/', (req, res, next) => {
+  return res.send(req.session);
 });
 
 module.exports = router;

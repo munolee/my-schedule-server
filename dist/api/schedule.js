@@ -33,7 +33,7 @@ router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functio
     const schedule = yield client
         .db('schedule')
         .collection('schedule')
-        .find()
+        .find({ userId: res.locals.id })
         .toArray();
     // 공공 데이터 포탈 공휴일 데이터 요청 보내기
     const year = req.query.year || '2023';

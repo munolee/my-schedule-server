@@ -25,7 +25,7 @@ router.get('/', authJwt, async (req: Request, res: Response) => {
   const schedule = await client
     .db('schedule')
     .collection<ScheduleType>('schedule')
-    .find()
+    .find({ userId: res.locals.id })
     .toArray();
 
   // 공공 데이터 포탈 공휴일 데이터 요청 보내기
