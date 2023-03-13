@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("mongodb");
 const fast_xml_parser_1 = require("fast-xml-parser");
 const request = require('request');
+const authJwt = require('../middlewares/authJwt');
 const router = express_1.default.Router();
 const client = new mongodb_1.MongoClient(process.env.MONGO_URI);
 const parser = new fast_xml_parser_1.XMLParser();
@@ -27,7 +28,7 @@ client
     .catch((err) => console.log(err));
 const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}`;
 /** /api/schedule Get Endpoint **/
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // DB 스케쥴 데이터 불러오기
     const schedule = yield client
         .db('schedule')
@@ -74,7 +75,7 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }));
 }));
 /** /api/schedule Post Endpoint **/
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield client
         .db('schedule')
         .collection('schedule')

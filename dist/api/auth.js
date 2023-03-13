@@ -17,8 +17,9 @@ const passport_1 = __importDefault(require("passport"));
 const auth_1 = require("../middlewares/auth");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
+const authJwt = require('../middlewares/authJwt');
 /** /api/auth Get Endpoint **/
-router.get('/', (req, res, next) => {
+router.get('/', authJwt, (req, res, next) => {
     res.send(req.session);
 });
 /** /api/auth/login Post Endpoint **/
@@ -56,7 +57,7 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
     })(req, res, next);
 }));
 /** /api/auth/logout Post Endpoint **/
-router.post('/logout', auth_1.isLoggedIn, (req, res) => {
+router.post('/logout', authJwt, (req, res) => {
     req.session.destroy(() => {
         res.redirect('/');
     });

@@ -5,9 +5,10 @@ import { UserType } from 'user';
 import jwt from 'jsonwebtoken';
 
 const router: Router = express.Router();
+const authJwt = require('../middlewares/authJwt');
 
 /** /api/auth Get Endpoint **/
-router.get('/', (req, res, next) => {
+router.get('/', authJwt, (req, res, next) => {
   res.send(req.session);
 });
 
@@ -54,7 +55,7 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
 });
 
 /** /api/auth/logout Post Endpoint **/
-router.post('/logout', isLoggedIn, (req, res) => {
+router.post('/logout', authJwt, (req, res) => {
   req.session.destroy(() => {
     res.redirect('/');
   });

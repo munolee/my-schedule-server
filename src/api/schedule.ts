@@ -5,6 +5,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { ScheduleType, HolidayJsonType } from 'schedule';
 
 const request = require('request');
+const authJwt = require('../middlewares/authJwt');
 
 const router: Router = express.Router();
 const client = new MongoClient(process.env.MONGO_URI);
@@ -19,7 +20,7 @@ client
 const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}`;
 
 /** /api/schedule Get Endpoint **/
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', authJwt, async (req: Request, res: Response) => {
   // DB 스케쥴 데이터 불러오기
   const schedule = await client
     .db('schedule')
@@ -72,7 +73,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 /** /api/schedule Post Endpoint **/
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', authJwt, async (req: Request, res: Response) => {
   const result = await client
     .db('schedule')
     .collection<ScheduleType>('schedule')
