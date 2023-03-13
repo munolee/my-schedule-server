@@ -22,7 +22,7 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
         return next(err);
       }
       if (info) {
-        return res.status(401).send({
+        return res.status(401).json({
           success: false,
           message: info.message,
           token: null,

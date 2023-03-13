@@ -18,7 +18,7 @@ const authJwt = (req, res, next) => {
         }
         catch (err) {
             console.error(err);
-            res.status(401).send({
+            res.status(401).json({
                 message: '로그인이 필요합니다.',
             });
         }

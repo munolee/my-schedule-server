@@ -30,7 +30,7 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
             return next(err);
         }
         if (info) {
-            return res.status(401).send({
+            return res.status(401).json({
                 success: false,
                 message: info.message,
                 token: null,
