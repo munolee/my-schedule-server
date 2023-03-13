@@ -79,6 +79,7 @@ router.post('/', authJwt, async (req: Request, res: Response) => {
     .collection<ScheduleType>('schedule')
     .insertOne({
       ...req.body,
+      userId: res.locals.id,
     })
     .then(() => console.log('성공적으로 등록되었습니다.'))
     .catch((error) => console.error(error));
