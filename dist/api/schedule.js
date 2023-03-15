@@ -26,7 +26,7 @@ client
     .connect()
     .then(() => console.log('MongoDB Connected'))
     .catch((err) => console.log(err));
-const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}`;
+const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}&numOfRows=100`;
 /** /api/schedule Get Endpoint **/
 router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // DB 스케쥴 데이터 불러오기

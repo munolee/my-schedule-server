@@ -17,7 +17,7 @@ client
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.log(err));
 
-const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}`;
+const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}&numOfRows=100`;
 
 /** /api/schedule Get Endpoint **/
 router.get('/', authJwt, async (req: Request, res: Response) => {
