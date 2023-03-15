@@ -35,7 +35,7 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
           process.env.JWT_SECRET_KEY,
           {
             algorithm: 'HS256',
-            expiresIn: '1h',
+            expiresIn: process.env.JWT_EXPIRES_IN,
           }
         );
         res.status(200).json({

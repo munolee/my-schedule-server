@@ -39,7 +39,7 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
             }
             const token = jsonwebtoken_1.default.sign(Object.assign({}, user), process.env.JWT_SECRET_KEY, {
                 algorithm: 'HS256',
-                expiresIn: '1h',
+                expiresIn: process.env.JWT_EXPIRES_IN,
             });
             res.status(200).json({
                 success: true,
