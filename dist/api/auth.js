@@ -23,24 +23,21 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
     passport_1.default.authenticate('local', (err, user, info) => {
         if (err) {
             console.error(err);
-            return next(err);
+            next(err);
         }
         if (info) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: info.message,
                 token: null,
             });
         }
-        return req.login(user, (loginErr) => __awaiter(void 0, void 0, void 0, function* () {
+        req.login(user, (loginErr) => __awaiter(void 0, void 0, void 0, function* () {
             if (loginErr) {
                 console.error(loginErr);
                 return next(loginErr);
             }
-            const token = jsonwebtoken_1.default.sign({
-                id: user.id,
-                pw: user.pw,
-            }, process.env.JWT_SECRET_KEY, {
+            const token = jsonwebtoken_1.default.sign(Object.assign({}, user), process.env.JWT_SECRET_KEY, {
                 algorithm: 'HS256',
                 expiresIn: '1h',
             });
@@ -54,13 +51,21 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
 }));
 /** /api/auth/logout Post Endpoint **/
 router.post('/logout', authJwt, (req, res) => {
-    req.session.destroy(() => {
-        return res.redirect('/');
+    req.logout(() => {
+        req.session.destroy(() => {
+            res.status(200).json({
+                success: true,
+                message: '로그아웃 되었습니다.',
+            });
+        });
     });
 });
 /** /api/auth Get Endpoint **/
-router.get('/', (req, res, next) => {
-    return res.send(req.session);
+router.get('/login', auth_1.isLoggedIn, (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: '로그인한 상태입니다.',
+    });
 });
 module.exports = router;
 //# sourceMappingURL=auth.js.map

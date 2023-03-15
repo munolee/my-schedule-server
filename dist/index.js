@@ -16,7 +16,7 @@ const appRouter = require('./api');
 const localStrategy = require('./passport/localStrategy');
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8080;
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ credentials: true, origin: process.env.CORS_ORIGIN }));
 app.use(express_1.default.static('public'));
 app.get('/', (_req, res) => {
     return res.sendFile('index.html', { root: path_1.default.join(__dirname, 'public') });

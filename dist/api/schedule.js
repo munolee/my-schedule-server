@@ -64,25 +64,35 @@ router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functio
                         return -1;
                     return -1;
                 });
-                return res.json(schedules);
+                res.json(schedules);
             });
         }
         catch (error) {
             console.error(error);
             // 에러 발생 시 DB 데이터만 내보내기
-            return res.json(schedule);
+            res.json(schedule);
         }
     }));
 }));
 /** /api/schedule Post Endpoint **/
 router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield client
+    yield client
         .db('schedule')
         .collection('schedule')
         .insertOne(Object.assign(Object.assign({}, req.body), { userId: res.locals.id }))
-        .then(() => console.log('성공적으로 등록되었습니다.'))
-        .catch((error) => console.error(error));
-    return res.json(result);
+        .then(() => {
+        res.status(200).json({
+            success: true,
+            message: '성공적으로 등록되었습니다.',
+        });
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(404).json({
+            success: false,
+            message: '일정 등록에 실패하였습니다.',
+        });
+    });
 }));
 module.exports = router;
 //# sourceMappingURL=schedule.js.map

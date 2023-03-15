@@ -6,7 +6,10 @@ const isLoggedIn = (req, res, next) => {
         next();
     }
     else {
-        res.status(403).json({ message: '로그인이 필요합니다.' });
+        res.status(403).json({
+            success: false,
+            message: '로그인이 필요합니다.',
+        });
     }
 };
 exports.isLoggedIn = isLoggedIn;

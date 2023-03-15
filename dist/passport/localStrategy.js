@@ -18,12 +18,6 @@ const mongodb_1 = require("mongodb");
 const LocalStrategy = passport_local_1.default.Strategy;
 const client = new mongodb_1.MongoClient(process.env.MONGO_URI);
 module.exports = () => {
-    passport_1.default.serializeUser((user, done) => {
-        done(null, user);
-    });
-    passport_1.default.deserializeUser((user, done) => {
-        done(null, user);
-    });
     passport_1.default.use(new LocalStrategy({
         usernameField: 'id',
         passwordField: 'pw',
@@ -53,5 +47,11 @@ module.exports = () => {
             done(error);
         }
     })));
+    passport_1.default.serializeUser((user, done) => {
+        done(null, user);
+    });
+    passport_1.default.deserializeUser((user, done) => {
+        done(null, user);
+    });
 };
 //# sourceMappingURL=localStrategy.js.map

@@ -6,14 +6,6 @@ const LocalStrategy = passportLocal.Strategy;
 const client = new MongoClient(process.env.MONGO_URI);
 
 module.exports = () => {
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-
-  passport.deserializeUser((user, done) => {
-    done(null, user);
-  });
-
   passport.use(
     new LocalStrategy(
       {
@@ -46,4 +38,12 @@ module.exports = () => {
       }
     )
   );
+
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+
+  passport.deserializeUser((user, done) => {
+    done(null, user);
+  });
 };

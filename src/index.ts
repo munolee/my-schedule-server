@@ -13,7 +13,7 @@ const localStrategy = require('./passport/localStrategy');
 
 const app = express();
 const port = process.env.PORT || 8080;
-app.use(cors());
+app.use(cors({ credentials: true, origin: process.env.CORS_ORIGIN }));
 
 app.use(express.static('public'));
 app.get('/', (_req: Request, res: Response) => {
@@ -25,7 +25,7 @@ localStrategy();
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
+    cookie: { maxAge: 1000 * 60 * 60 },
     resave: false,
     saveUninitialized: false,
   })

@@ -14,24 +14,23 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
     (err: Error, user: UserType, info: { message: string }) => {
       if (err) {
         console.error(err);
-        return next(err);
+        next(err);
       }
       if (info) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: info.message,
           token: null,
         });
       }
-      return req.login(user, async (loginErr) => {
+      req.login(user, async (loginErr) => {
         if (loginErr) {
           console.error(loginErr);
           return next(loginErr);
         }
         const token = jwt.sign(
           {
-            id: user.id,
-            pw: user.pw,
+            ...user,
           },
           process.env.JWT_SECRET_KEY,
           {
@@ -51,14 +50,22 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
 
 /** /api/auth/logout Post Endpoint **/
 router.post('/logout', authJwt, (req, res) => {
-  req.session.destroy(() => {
-    return res.redirect('/');
+  req.logout(() => {
+    req.session.destroy(() => {
+      res.status(200).json({
+        success: true,
+        message: '로그아웃 되었습니다.',
+      });
+    });
   });
 });
 
 /** /api/auth Get Endpoint **/
-router.get('/', (req, res, next) => {
-  return res.send(req.session);
+router.get('/login', isLoggedIn, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: '로그인한 상태입니다.',
+  });
 });
 
 module.exports = router;

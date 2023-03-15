@@ -61,12 +61,12 @@ router.get('/', authJwt, async (req: Request, res: Response) => {
             if (a.endDate >= b.endDate) return -1;
             return -1;
           });
-          return res.json(schedules);
+          res.json(schedules);
         });
       } catch (error) {
         console.error(error);
         // 에러 발생 시 DB 데이터만 내보내기
-        return res.json(schedule);
+        res.json(schedule);
       }
     }
   );
@@ -74,16 +74,26 @@ router.get('/', authJwt, async (req: Request, res: Response) => {
 
 /** /api/schedule Post Endpoint **/
 router.post('/', authJwt, async (req: Request, res: Response) => {
-  const result = await client
+  await client
     .db('schedule')
     .collection<ScheduleType>('schedule')
     .insertOne({
       ...req.body,
       userId: res.locals.id,
     })
-    .then(() => console.log('성공적으로 등록되었습니다.'))
-    .catch((error) => console.error(error));
-  return res.json(result);
+    .then(() => {
+      res.status(200).json({
+        success: true,
+        message: '성공적으로 등록되었습니다.',
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(404).json({
+        success: false,
+        message: '일정 등록에 실패하였습니다.',
+      });
+    });
 });
 
 module.exports = router;
