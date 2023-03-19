@@ -123,5 +123,34 @@ router.put('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
 }));
+/** /api/schedule Delete Endpoint **/
+router.delete('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const _id = req.params.id;
+        const result = yield client
+            .db('schedule')
+            .collection('schedule')
+            .deleteOne({ _id: new mongodb_1.ObjectId(_id) });
+        if (result.deletedCount === 0) {
+            res.status(404).json({
+                success: false,
+                message: '해당 일정을 찾을 수 없습니다.',
+            });
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: '성공적으로 삭제되었습니다.',
+            });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: '일정 삭제에 실패하였습니다.',
+        });
+    }
+}));
 module.exports = router;
 //# sourceMappingURL=schedule.js.map
