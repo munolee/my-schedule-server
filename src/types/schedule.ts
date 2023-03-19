@@ -1,5 +1,7 @@
+import { ObjectId } from 'mongodb';
+
 export interface ScheduleType {
-  _id: string;
+  _id: ObjectId | string;
   startDate: string;
   endDate: string;
   eventTitle: string;

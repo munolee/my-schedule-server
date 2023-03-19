@@ -76,23 +76,52 @@ router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 /** /api/schedule Post Endpoint **/
 router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield client
-        .db('schedule')
-        .collection('schedule')
-        .insertOne(Object.assign(Object.assign({}, req.body), { userId: res.locals.id }))
-        .then(() => {
+    try {
+        yield client
+            .db('schedule')
+            .collection('schedule')
+            .insertOne(Object.assign(Object.assign({}, req.body), { userId: res.locals.id }));
         res.status(200).json({
             success: true,
             message: '성공적으로 등록되었습니다.',
         });
-    })
-        .catch((error) => {
+    }
+    catch (error) {
         console.error(error);
-        res.status(404).json({
+        res.status(500).json({
             success: false,
             message: '일정 등록에 실패하였습니다.',
         });
-    });
+    }
+}));
+/** /api/schedule Put Endpoint **/
+router.put('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const _id = req.params.id;
+        const result = yield client
+            .db('schedule')
+            .collection('schedule')
+            .updateOne({ _id: new mongodb_1.ObjectId(_id) }, { $set: Object.assign({}, req.body) }, { upsert: true });
+        if (result.modifiedCount === 0) {
+            res.status(404).json({
+                success: false,
+                message: '해당 일정을 찾을 수 없습니다.',
+            });
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: '성공적으로 수정되었습니다.',
+            });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: '일정 수정에 실패하였습니다.',
+        });
+    }
 }));
 module.exports = router;
 //# sourceMappingURL=schedule.js.map

@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express, { Request, Response, Router } from 'express';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import { XMLParser } from 'fast-xml-parser';
 import { ScheduleType, HolidayJsonType } from 'schedule';
 
@@ -74,26 +74,58 @@ router.get('/', authJwt, async (req: Request, res: Response) => {
 
 /** /api/schedule Post Endpoint **/
 router.post('/', authJwt, async (req: Request, res: Response) => {
-  await client
-    .db('schedule')
-    .collection<ScheduleType>('schedule')
-    .insertOne({
-      ...req.body,
-      userId: res.locals.id,
-    })
-    .then(() => {
-      res.status(200).json({
-        success: true,
-        message: '성공적으로 등록되었습니다.',
+  try {
+    await client
+      .db('schedule')
+      .collection<ScheduleType>('schedule')
+      .insertOne({
+        ...req.body,
+        userId: res.locals.id,
       });
-    })
-    .catch((error) => {
-      console.error(error);
+    res.status(200).json({
+      success: true,
+      message: '성공적으로 등록되었습니다.',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: '일정 등록에 실패하였습니다.',
+    });
+  }
+});
+
+/** /api/schedule Put Endpoint **/
+router.put('/:id', authJwt, async (req: Request, res: Response) => {
+  try {
+    const _id = req.params.id;
+    const result = await client
+      .db('schedule')
+      .collection<ScheduleType>('schedule')
+      .updateOne(
+        { _id: new ObjectId(_id) },
+        { $set: { ...req.body } },
+        { upsert: true }
+      );
+
+    if (result.modifiedCount === 0) {
       res.status(404).json({
         success: false,
-        message: '일정 등록에 실패하였습니다.',
+        message: '해당 일정을 찾을 수 없습니다.',
       });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: '성공적으로 수정되었습니다.',
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: '일정 수정에 실패하였습니다.',
     });
+  }
 });
 
 module.exports = router;
