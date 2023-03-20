@@ -14,7 +14,7 @@
 
 ## 기능 소개
 - (**CRUD**) 일정을 조회하고 추가, 수정, 삭제할 수 있습니다.
-- 공공데이터포털 오픈 API를 활용해 **공휴일 데이터**를 클라이언트에게 전달합니다. (한국천문연구원 특일 정보)
+- 공공데이터포털 오픈 API를 활용해 **공휴일 데이터**를 클라이언트에게 전달합니다. ([한국천문연구원 특일 정보](https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15012690))
 - Passport와 jsonwebtoken, session을 통해 **로그인/로그아웃**을 처리하며, **JWT Token**을 발급합니다.
 
 <br>
