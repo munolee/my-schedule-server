@@ -25,10 +25,10 @@ client
     .catch((err) => console.log(err));
 /** /api/schedule Get Endpoint **/
 router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const dbo = client.db('schedule');
     try {
         // DB 스케쥴 데이터 불러오기
-        const schedule = yield client
-            .db('schedule')
+        const schedule = yield dbo
             .collection('schedule')
             .find({ userId: res.locals.id })
             .toArray();

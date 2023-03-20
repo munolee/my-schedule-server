@@ -16,14 +16,14 @@ client
 
 /** /api/schedule Get Endpoint **/
 router.get('/', authJwt, async (req: Request, res: Response) => {
+  const dbo = client.db('schedule');
+
   try {
     // DB 스케쥴 데이터 불러오기
-    const schedule = await client
-      .db('schedule')
+    const schedule = await dbo
       .collection<ScheduleType>('schedule')
       .find({ userId: res.locals.id })
       .toArray();
-
     res.status(200).json({
       success: true,
       message: '일정 데이터 요청에 성공하였습니다.',
