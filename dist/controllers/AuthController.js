@@ -42,6 +42,7 @@ const authLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                 success: true,
                 message: '로그인에 성공하였습니다.',
                 token,
+                userId: user.id,
             });
         }));
     })(req, res, next);

@@ -36,6 +36,7 @@ export const authLogin = async (req: Request, res: Response, next: NextFunction)
         success: true,
         message: '로그인에 성공하였습니다.',
         token,
+        userId: user.id,
       });
     });
   })(req, res, next);
