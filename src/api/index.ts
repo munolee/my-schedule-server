@@ -1,11 +1,11 @@
-import express, { Router } from 'express';
+import express from 'express';
 
-const router: Router = express.Router();
+const appRouter = express.Router();
 
-router.use('/auth', require('./auth'));
+appRouter.use('/auth', require('./auth'));
 
-router.use('/holiday', require('./holiday'));
+appRouter.use('/holiday', require('./holiday'));
 
-router.use('/schedule', require('./schedule'));
+appRouter.use('/schedule', require('./schedule'));
 
-module.exports = router;
+export default module.exports = appRouter;

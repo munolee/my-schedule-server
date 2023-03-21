@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const router = express_1.default.Router();
-router.use('/auth', require('./auth'));
-router.use('/holiday', require('./holiday'));
-router.use('/schedule', require('./schedule'));
-module.exports = router;
+const appRouter = express_1.default.Router();
+appRouter.use('/auth', require('./auth'));
+appRouter.use('/holiday', require('./holiday'));
+appRouter.use('/schedule', require('./schedule'));
+exports.default = module.exports = appRouter;
 //# sourceMappingURL=index.js.map

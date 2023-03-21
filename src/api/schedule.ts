@@ -20,10 +20,7 @@ router.get('/', authJwt, async (req: Request, res: Response) => {
 
   try {
     // DB 스케쥴 데이터 불러오기
-    const schedule = await dbo
-      .collection<ScheduleType>('schedule')
-      .find({ userId: res.locals.id })
-      .toArray();
+    const schedule = await dbo.collection<ScheduleType>('schedule').find({ userId: res.locals.id }).toArray();
     res.status(200).json({
       success: true,
       message: '일정 데이터 요청에 성공하였습니다.',
@@ -68,11 +65,7 @@ router.put('/:id', authJwt, async (req: Request, res: Response) => {
     const result = await client
       .db('schedule')
       .collection<ScheduleType>('schedule')
-      .updateOne(
-        { _id: new ObjectId(_id) },
-        { $set: { ...req.body } },
-        { upsert: true }
-      );
+      .updateOne({ _id: new ObjectId(_id) }, { $set: { ...req.body } }, { upsert: true });
 
     if (result.modifiedCount === 0) {
       res.status(404).json({

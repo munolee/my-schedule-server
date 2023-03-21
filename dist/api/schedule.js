@@ -28,10 +28,7 @@ router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functio
     const dbo = client.db('schedule');
     try {
         // DB 스케쥴 데이터 불러오기
-        const schedule = yield dbo
-            .collection('schedule')
-            .find({ userId: res.locals.id })
-            .toArray();
+        const schedule = yield dbo.collection('schedule').find({ userId: res.locals.id }).toArray();
         res.status(200).json({
             success: true,
             message: '일정 데이터 요청에 성공하였습니다.',

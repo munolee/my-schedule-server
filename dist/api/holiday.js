@@ -22,8 +22,7 @@ const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/ge
 /** /api/holiday Get Endpoint **/
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // 공공 데이터 포탈 공휴일 데이터 요청 보내기
-    const year = req.query.year || '2023';
-    request(`${url}&solYear=${year}`, (error, response, body) => __awaiter(void 0, void 0, void 0, function* () {
+    request(`${url}&solYear=${req.query.year}`, (error, response, body) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield new Promise(() => {
                 const holidayJson = parser.parse(body).response.body.items.item;
@@ -31,12 +30,8 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 const holiday = Object.values(holidayJson).map((data) => {
                     return {
                         _id: '',
-                        startDate: (data === null || data === void 0 ? void 0 : data.locdate)
-                            .toString()
-                            .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        endDate: (data === null || data === void 0 ? void 0 : data.locdate)
-                            .toString()
-                            .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        startDate: (data === null || data === void 0 ? void 0 : data.locdate).toString().replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        endDate: (data === null || data === void 0 ? void 0 : data.locdate).toString().replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
                         eventTitle: data === null || data === void 0 ? void 0 : data.dateName,
                         typeId: 2,
                         bgColor: '#EDAA7D',

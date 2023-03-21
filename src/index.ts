@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import passport from 'passport';
 import session from 'express-session';
@@ -7,20 +6,19 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import appRouter from './api';
 
-const appRouter = require('./api');
 const localStrategy = require('./passport/localStrategy');
 
 const app = express();
-const port = process.env.PORT || 8080;
+dotenv.config();
+
+// To allow cross-origin requests
 app.use(cors({ credentials: true, origin: process.env.CORS_ORIGIN }));
 
-app.use(express.static('public'));
-app.get('/', (_req: Request, res: Response) => {
-  return res.sendFile('index.html', { root: path.join(__dirname, 'public') });
-});
-
-// passport local 설정 및 express-session 추가
+// setup passport local, session
 localStrategy();
 app.use(
   session({
@@ -33,20 +31,33 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Swagger UI 미들웨어 적용
+// Route Prefixes
+app.use('/api', appRouter);
+
+// setup Swagger middleware
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// config bodyParser
+// setup bodyparser
 app.use(bodyParser.json());
 
-// /api 엔드포인트에 요청이 들어오면 api 폴더로 분기
-app.use('/api', appRouter);
+// Send index.html on root request
+app.use(express.static('dist'));
+app.get('/', (req: Request, res: Response) => {
+  console.log('sending index.html');
+  res.sendFile('/dist/index.html');
+});
 
+// throw 404 if URL not found
 app.all('*', (req, res) => {
-  res.status(404).send('<h1> 요청 페이지 없음 </h1>');
+  res.status(404).send('<h1> Page not found </h1>');
 });
 
-app.listen(port, () => {
-  return console.log(`App is listening on port ${port} !`);
-});
+const port = process.env.PORT || 8080;
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(port, () => console.log(`App is listening on port ${port} !`));
+  })
+  .catch((err) => console.log(err.message));

@@ -11,11 +11,7 @@ export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const isNotLoggedIn = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isNotLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   if (!req.isAuthenticated()) {
     next();
   } else {

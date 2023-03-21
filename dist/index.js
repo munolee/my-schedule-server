@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
@@ -12,16 +11,15 @@ const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const path_1 = __importDefault(require("path"));
 const yamljs_1 = __importDefault(require("yamljs"));
-const appRouter = require('./api');
+const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const api_1 = __importDefault(require("./api"));
 const localStrategy = require('./passport/localStrategy');
 const app = (0, express_1.default)();
-const port = process.env.PORT || 8080;
+dotenv_1.default.config();
+// To allow cross-origin requests
 app.use((0, cors_1.default)({ credentials: true, origin: process.env.CORS_ORIGIN }));
-app.use(express_1.default.static('public'));
-app.get('/', (_req, res) => {
-    return res.sendFile('index.html', { root: path_1.default.join(__dirname, 'public') });
-});
-// passport local 설정 및 express-session 추가
+// setup passport local, session
 localStrategy();
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
@@ -31,17 +29,28 @@ app.use((0, express_session_1.default)({
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
-// Swagger UI 미들웨어 적용
+// Route Prefixes
+app.use('/api', api_1.default);
+// setup Swagger middleware
 const swaggerSpec = yamljs_1.default.load(path_1.default.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
-// config bodyParser
+// setup bodyparser
 app.use(body_parser_1.default.json());
-// /api 엔드포인트에 요청이 들어오면 api 폴더로 분기
-app.use('/api', appRouter);
+// Send index.html on root request
+app.use(express_1.default.static('dist'));
+app.get('/', (req, res) => {
+    console.log('sending index.html');
+    res.sendFile('/dist/index.html');
+});
+// throw 404 if URL not found
 app.all('*', (req, res) => {
-    res.status(404).send('<h1> 요청 페이지 없음 </h1>');
+    res.status(404).send('<h1> Page not found </h1>');
 });
-app.listen(port, () => {
-    return console.log(`App is listening on port ${port} !`);
-});
+const port = process.env.PORT || 8080;
+mongoose_1.default
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+    app.listen(port, () => console.log(`App is listening on port ${port} !`));
+})
+    .catch((err) => console.log(err.message));
 //# sourceMappingURL=index.js.map
