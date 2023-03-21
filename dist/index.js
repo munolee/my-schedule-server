@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
@@ -12,11 +13,9 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const path_1 = __importDefault(require("path"));
 const yamljs_1 = __importDefault(require("yamljs"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const api_1 = __importDefault(require("./api"));
 const localStrategy = require('./passport/localStrategy');
 const app = (0, express_1.default)();
-dotenv_1.default.config();
 // To allow cross-origin requests
 app.use((0, cors_1.default)({ credentials: true, origin: process.env.CORS_ORIGIN }));
 // setup passport local, session
@@ -29,13 +28,13 @@ app.use((0, express_session_1.default)({
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
+// setup bodyparser
+app.use(body_parser_1.default.json());
 // Route Prefixes
 app.use('/api', api_1.default);
 // setup Swagger middleware
 const swaggerSpec = yamljs_1.default.load(path_1.default.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
-// setup bodyparser
-app.use(body_parser_1.default.json());
 // Send index.html on root request
 app.use(express_1.default.static('dist'));
 app.get('/', (req, res) => {

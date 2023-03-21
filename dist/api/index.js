@@ -8,5 +8,5 @@ const appRouter = express_1.default.Router();
 appRouter.use('/auth', require('./auth'));
 appRouter.use('/holiday', require('./holiday'));
 appRouter.use('/schedule', require('./schedule'));
-exports.default = module.exports = appRouter;
+exports.default = appRouter;
 //# sourceMappingURL=index.js.map

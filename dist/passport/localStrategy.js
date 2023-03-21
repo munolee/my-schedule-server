@@ -14,9 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = __importDefault(require("passport-local"));
-const mongodb_1 = require("mongodb");
+const UserModel_1 = __importDefault(require("../models/UserModel"));
 const LocalStrategy = passport_local_1.default.Strategy;
-const client = new mongodb_1.MongoClient(process.env.MONGO_URI);
 module.exports = () => {
     passport_1.default.use(new LocalStrategy({
         usernameField: 'id',
@@ -25,9 +24,9 @@ module.exports = () => {
         passReqToCallback: false,
     }, (id, pw, done) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const user = yield client.db('schedule').collection('user');
             // 가입된 회원인지 아닌지 확인
-            const exUser = yield user.findOne({ id: id });
+            const exUser = yield UserModel_1.default.findOne({ id: id });
+            console.log(exUser);
             // 만일 가입된 회원이면
             if (exUser) {
                 if (pw === exUser.pw) {

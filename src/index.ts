@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import passport from 'passport';
 import session from 'express-session';
@@ -7,13 +8,11 @@ import swaggerUi from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import appRouter from './api';
 
 const localStrategy = require('./passport/localStrategy');
 
 const app = express();
-dotenv.config();
 
 // To allow cross-origin requests
 app.use(cors({ credentials: true, origin: process.env.CORS_ORIGIN }));
@@ -31,15 +30,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// setup bodyparser
+app.use(bodyParser.json());
+
 // Route Prefixes
 app.use('/api', appRouter);
 
 // setup Swagger middleware
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// setup bodyparser
-app.use(bodyParser.json());
 
 // Send index.html on root request
 app.use(express.static('dist'));

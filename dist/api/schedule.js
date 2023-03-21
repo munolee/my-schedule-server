@@ -14,21 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
-const mongodb_1 = require("mongodb");
+const mongoose_1 = require("mongoose");
+const ScheduleModel_1 = __importDefault(require("../models/ScheduleModel"));
 const authJwt = require('../middlewares/authJwt');
 const router = express_1.default.Router();
-const client = new mongodb_1.MongoClient(process.env.MONGO_URI);
-// mongo DB 접속 확인
-client
-    .connect()
-    .then(() => console.log('MongoDB Connected'))
-    .catch((err) => console.log(err));
+const { ObjectId } = mongoose_1.Types;
 /** /api/schedule Get Endpoint **/
 router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const dbo = client.db('schedule');
     try {
-        // DB 스케쥴 데이터 불러오기
-        const schedule = yield dbo.collection('schedule').find({ userId: res.locals.id }).toArray();
+        const schedule = yield ScheduleModel_1.default.find({ userId: res.locals.id });
         res.status(200).json({
             success: true,
             message: '일정 데이터 요청에 성공하였습니다.',
@@ -46,10 +40,7 @@ router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functio
 /** /api/schedule Post Endpoint **/
 router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield client
-            .db('schedule')
-            .collection('schedule')
-            .insertOne(Object.assign(Object.assign({}, req.body), { userId: res.locals.id }));
+        yield ScheduleModel_1.default.create(Object.assign(Object.assign({}, req.body), { userId: res.locals.id }));
         res.status(200).json({
             success: true,
             message: '성공적으로 등록되었습니다.',
@@ -67,10 +58,7 @@ router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functi
 router.put('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const _id = req.params.id;
-        const result = yield client
-            .db('schedule')
-            .collection('schedule')
-            .updateOne({ _id: new mongodb_1.ObjectId(_id) }, { $set: Object.assign({}, req.body) }, { upsert: true });
+        const result = yield ScheduleModel_1.default.updateOne({ _id: new ObjectId(_id) }, { $set: Object.assign({}, req.body) }, { upsert: true });
         if (result.modifiedCount === 0) {
             res.status(404).json({
                 success: false,
@@ -96,10 +84,7 @@ router.put('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, func
 router.delete('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const _id = req.params.id;
-        const result = yield client
-            .db('schedule')
-            .collection('schedule')
-            .deleteOne({ _id: new mongodb_1.ObjectId(_id) });
+        const result = yield ScheduleModel_1.default.deleteOne({ _id: new ObjectId(_id) });
         if (result.deletedCount === 0) {
             res.status(404).json({
                 success: false,

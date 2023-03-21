@@ -31,6 +31,6 @@ const scheduleSchema = new Schema({
         required: true,
     },
 });
-const Schedule = mongoose_1.default.model('Schedule', scheduleSchema);
+const Schedule = mongoose_1.default.model('Schedule', scheduleSchema, 'schedule');
 exports.default = Schedule;
 //# sourceMappingURL=ScheduleModel.js.map

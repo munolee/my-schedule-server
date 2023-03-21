@@ -7,7 +7,7 @@ const authJwt = (req: Request, res: Response, next: NextFunction) => {
     // token 검증
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY) as JwtPayload;
     if (decoded) {
-      res.locals.id = decoded.id;
+      res.locals.id = decoded._doc.id;
       next(); // 로그인 성공 시 다음 메서드 실행
     } else {
       res.status(403).json({

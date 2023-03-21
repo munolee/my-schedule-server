@@ -8,4 +8,4 @@ appRouter.use('/holiday', require('./holiday'));
 
 appRouter.use('/schedule', require('./schedule'));
 
-export default module.exports = appRouter;
+export default appRouter;

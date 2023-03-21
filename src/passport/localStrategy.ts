@@ -1,9 +1,8 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import { MongoClient } from 'mongodb';
+import User from '../models/UserModel';
 
 const LocalStrategy = passportLocal.Strategy;
-const client = new MongoClient(process.env.MONGO_URI);
 
 module.exports = () => {
   passport.use(
@@ -16,10 +15,10 @@ module.exports = () => {
       },
       async (id, pw, done) => {
         try {
-          const user = await client.db('schedule').collection('user');
-
           // 가입된 회원인지 아닌지 확인
-          const exUser = await user.findOne({ id: id });
+          const exUser = await User.findOne({ id: id });
+          console.log(exUser);
+
           // 만일 가입된 회원이면
           if (exUser) {
             if (pw === exUser.pw) {

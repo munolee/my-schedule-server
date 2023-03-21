@@ -9,7 +9,7 @@ const authJwt = require('../middlewares/authJwt');
 
 /** /api/auth/login Post Endpoint **/
 router.post('/login', isNotLoggedIn, async (req, res, next) => {
-  passport.authenticate('local', { session: false }, (err: Error, user: UserType, info: { message: string }) => {
+  passport.authenticate('local', (err: Error, user: UserType, info: { message: string }) => {
     if (err) {
       console.error(err);
       next(err);
