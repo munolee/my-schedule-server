@@ -26,7 +26,6 @@ module.exports = () => {
         try {
             // 가입된 회원인지 아닌지 확인
             const exUser = yield UserModel_1.default.findOne({ id: id });
-            console.log(exUser);
             // 만일 가입된 회원이면
             if (exUser) {
                 if (pw === exUser.pw) {
