@@ -1,14 +1,10 @@
-import express, { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { isNotLoggedIn, isLoggedIn } from '../middlewares/auth';
-import { UserType } from 'user';
+import { UserType } from '../interfaces/user';
 import jwt from 'jsonwebtoken';
 
-const router: Router = express.Router();
-const authJwt = require('../middlewares/authJwt');
-
 /** /api/auth/login Post Endpoint **/
-router.post('/login', isNotLoggedIn, async (req, res, next) => {
+export const authLogin = async (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate('local', (err: Error, user: UserType, info: { message: string }) => {
     if (err) {
       console.error(err);
@@ -43,10 +39,10 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
       });
     });
   })(req, res, next);
-});
+};
 
 /** /api/auth/logout Post Endpoint **/
-router.post('/logout', authJwt, (req, res) => {
+export const authLogout = (req: Request, res: Response) => {
   req.logout(() => {
     req.session.destroy(() => {
       res.status(200).json({
@@ -55,14 +51,12 @@ router.post('/logout', authJwt, (req, res) => {
       });
     });
   });
-});
+};
 
 /** /api/auth Get Endpoint **/
-router.get('/login', isLoggedIn, (req, res) => {
+export const authLogInCheck = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: '로그인한 상태입니다.',
   });
-});
-
-module.exports = router;
+};

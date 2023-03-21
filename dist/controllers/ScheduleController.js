@@ -12,15 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const express_1 = __importDefault(require("express"));
+exports.deleteSchedule = exports.updateSchedule = exports.createSchedule = exports.getSchedule = void 0;
 const mongoose_1 = require("mongoose");
 const ScheduleModel_1 = __importDefault(require("../models/ScheduleModel"));
-const authJwt = require('../middlewares/authJwt');
-const router = express_1.default.Router();
 const { ObjectId } = mongoose_1.Types;
 /** /api/schedule Get Endpoint **/
-router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const schedule = yield ScheduleModel_1.default.find({ userId: res.locals.id });
         res.status(200).json({
@@ -36,9 +33,10 @@ router.get('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functio
             message: '일정 데이터 전송에 실패하였습니다.',
         });
     }
-}));
+});
+exports.getSchedule = getSchedule;
 /** /api/schedule Post Endpoint **/
-router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield ScheduleModel_1.default.create(Object.assign(Object.assign({}, req.body), { userId: res.locals.id }));
         res.status(200).json({
@@ -53,9 +51,10 @@ router.post('/', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, functi
             message: '일정 등록에 실패하였습니다.',
         });
     }
-}));
+});
+exports.createSchedule = createSchedule;
 /** /api/schedule Put Endpoint **/
-router.put('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const _id = req.params.id;
         const result = yield ScheduleModel_1.default.updateOne({ _id: new ObjectId(_id) }, { $set: Object.assign({}, req.body) }, { upsert: true });
@@ -79,9 +78,10 @@ router.put('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, func
             message: '일정 수정에 실패하였습니다.',
         });
     }
-}));
+});
+exports.updateSchedule = updateSchedule;
 /** /api/schedule Delete Endpoint **/
-router.delete('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const _id = req.params.id;
         const result = yield ScheduleModel_1.default.deleteOne({ _id: new ObjectId(_id) });
@@ -105,6 +105,6 @@ router.delete('/:id', authJwt, (req, res) => __awaiter(void 0, void 0, void 0, f
             message: '일정 삭제에 실패하였습니다.',
         });
     }
-}));
-module.exports = router;
-//# sourceMappingURL=schedule.js.map
+});
+exports.deleteSchedule = deleteSchedule;
+//# sourceMappingURL=ScheduleController.js.map

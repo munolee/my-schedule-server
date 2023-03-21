@@ -12,14 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+exports.authLogInCheck = exports.authLogout = exports.authLogin = void 0;
 const passport_1 = __importDefault(require("passport"));
-const auth_1 = require("../middlewares/auth");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const router = express_1.default.Router();
-const authJwt = require('../middlewares/authJwt');
 /** /api/auth/login Post Endpoint **/
-router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const authLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     passport_1.default.authenticate('local', (err, user, info) => {
         if (err) {
             console.error(err);
@@ -48,9 +45,10 @@ router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0
             });
         }));
     })(req, res, next);
-}));
+});
+exports.authLogin = authLogin;
 /** /api/auth/logout Post Endpoint **/
-router.post('/logout', authJwt, (req, res) => {
+const authLogout = (req, res) => {
     req.logout(() => {
         req.session.destroy(() => {
             res.status(200).json({
@@ -59,13 +57,14 @@ router.post('/logout', authJwt, (req, res) => {
             });
         });
     });
-});
+};
+exports.authLogout = authLogout;
 /** /api/auth Get Endpoint **/
-router.get('/login', auth_1.isLoggedIn, (req, res) => {
+const authLogInCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({
         success: true,
         message: '로그인한 상태입니다.',
     });
 });
-module.exports = router;
-//# sourceMappingURL=auth.js.map
+exports.authLogInCheck = authLogInCheck;
+//# sourceMappingURL=AuthController.js.map

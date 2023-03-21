@@ -13,7 +13,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const path_1 = __importDefault(require("path"));
 const yamljs_1 = __importDefault(require("yamljs"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const api_1 = __importDefault(require("./api"));
+const routes_1 = __importDefault(require("./routes"));
 const localStrategy = require('./passport/localStrategy');
 const app = (0, express_1.default)();
 // To allow cross-origin requests
@@ -31,7 +31,7 @@ app.use(passport_1.default.session());
 // setup bodyparser
 app.use(body_parser_1.default.json());
 // Route Prefixes
-app.use('/api', api_1.default);
+app.use('/api', routes_1.default);
 // setup Swagger middleware
 const swaggerSpec = yamljs_1.default.load(path_1.default.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));

@@ -1,16 +1,14 @@
-import 'dotenv/config';
-import express, { Request, Response, Router } from 'express';
-import { HolidayJsonType, ScheduleType } from 'schedule';
+import { Request, Response } from 'express';
+import { HolidayJsonType } from '../interfaces/schedule';
 import { XMLParser } from 'fast-xml-parser';
 
 const request = require('request');
 
-const router: Router = express.Router();
 const parser = new XMLParser();
 const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}&numOfRows=100`;
 
 /** /api/holiday Get Endpoint **/
-router.get('/', async (req: Request, res: Response) => {
+export const getHoliday = async (req: Request, res: Response) => {
   // 공공 데이터 포탈 공휴일 데이터 요청 보내기
   request(`${url}&solYear=${req.query.year}`, async (error: Error, response: Response, body: string | Buffer) => {
     try {
@@ -18,7 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
         const holidayJson = parser.parse(body).response.body.items.item;
 
         // 가져온 데이터를 형식에 맞게 파싱하기
-        const holiday: ScheduleType[] = Object.values(holidayJson).map((data: HolidayJsonType) => {
+        const holiday = Object.values(holidayJson).map((data: HolidayJsonType) => {
           return {
             _id: '',
             startDate: (data?.locdate).toString().replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
@@ -43,6 +41,4 @@ router.get('/', async (req: Request, res: Response) => {
       });
     }
   });
-});
-
-module.exports = router;
+};

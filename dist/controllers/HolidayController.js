@@ -8,19 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const express_1 = __importDefault(require("express"));
+exports.getHoliday = void 0;
 const fast_xml_parser_1 = require("fast-xml-parser");
 const request = require('request');
-const router = express_1.default.Router();
 const parser = new fast_xml_parser_1.XMLParser();
 const url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo?serviceKey=${process.env.OPENAPI_SERVICE_KEY}&numOfRows=100`;
 /** /api/holiday Get Endpoint **/
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getHoliday = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // 공공 데이터 포탈 공휴일 데이터 요청 보내기
     request(`${url}&solYear=${req.query.year}`, (error, response, body) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -52,6 +47,6 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
     }));
-}));
-module.exports = router;
-//# sourceMappingURL=holiday.js.map
+});
+exports.getHoliday = getHoliday;
+//# sourceMappingURL=HolidayController.js.map

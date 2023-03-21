@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
 import mongoose from 'mongoose';
-import appRouter from './api';
+import appRouter from './routes';
 
 const localStrategy = require('./passport/localStrategy');
 

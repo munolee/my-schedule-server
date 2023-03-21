@@ -1,16 +1,11 @@
-import 'dotenv/config';
-import express, { Request, Response, Router } from 'express';
+import { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import Schedule from '../models/ScheduleModel';
-
-const authJwt = require('../middlewares/authJwt');
-
-const router: Router = express.Router();
 
 const { ObjectId } = Types;
 
 /** /api/schedule Get Endpoint **/
-router.get('/', authJwt, async (req: Request, res: Response) => {
+export const getSchedule = async (req: Request, res: Response) => {
   try {
     const schedule = await Schedule.find({ userId: res.locals.id });
     res.status(200).json({
@@ -25,10 +20,10 @@ router.get('/', authJwt, async (req: Request, res: Response) => {
       message: '일정 데이터 전송에 실패하였습니다.',
     });
   }
-});
+};
 
 /** /api/schedule Post Endpoint **/
-router.post('/', authJwt, async (req: Request, res: Response) => {
+export const createSchedule = async (req: Request, res: Response) => {
   try {
     await Schedule.create({
       ...req.body,
@@ -45,10 +40,10 @@ router.post('/', authJwt, async (req: Request, res: Response) => {
       message: '일정 등록에 실패하였습니다.',
     });
   }
-});
+};
 
 /** /api/schedule Put Endpoint **/
-router.put('/:id', authJwt, async (req: Request, res: Response) => {
+export const updateSchedule = async (req: Request, res: Response) => {
   try {
     const _id = req.params.id;
     const result = await Schedule.updateOne({ _id: new ObjectId(_id) }, { $set: { ...req.body } }, { upsert: true });
@@ -71,10 +66,10 @@ router.put('/:id', authJwt, async (req: Request, res: Response) => {
       message: '일정 수정에 실패하였습니다.',
     });
   }
-});
+};
 
 /** /api/schedule Delete Endpoint **/
-router.delete('/:id', authJwt, async (req: Request, res: Response) => {
+export const deleteSchedule = async (req: Request, res: Response) => {
   try {
     const _id = req.params.id;
     const result = await Schedule.deleteOne({ _id: new ObjectId(_id) });
@@ -97,6 +92,4 @@ router.delete('/:id', authJwt, async (req: Request, res: Response) => {
       message: '일정 삭제에 실패하였습니다.',
     });
   }
-});
-
-module.exports = router;
+};
