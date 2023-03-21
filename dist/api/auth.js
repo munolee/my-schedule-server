@@ -20,7 +20,7 @@ const router = express_1.default.Router();
 const authJwt = require('../middlewares/authJwt');
 /** /api/auth/login Post Endpoint **/
 router.post('/login', auth_1.isNotLoggedIn, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    passport_1.default.authenticate('local', (err, user, info) => {
+    passport_1.default.authenticate('local', { session: false }, (err, user, info) => {
         if (err) {
             console.error(err);
             next(err);
