@@ -15,7 +15,7 @@ const localStrategy = require('./passport/localStrategy');
 const app = express();
 
 // To allow cross-origin requests
-app.use(cors({ credentials: true, origin: process.env.CORS_ORIGIN }));
+app.use(cors({ credentials: true, origin: [process.env.CORS_ORIGIN_01, process.env.CORS_ORIGIN_02] }));
 
 // setup passport local, session
 localStrategy();
