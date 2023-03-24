@@ -15,6 +15,14 @@ export const getHoliday = async (req: Request, res: Response) => {
       await new Promise(() => {
         const holidayJson = parser.parse(body).response.body.items.item;
 
+        if (!holidayJson) {
+          res.status(200).json({
+            success: true,
+            message: '공휴일 데이터가 존재하지 않습니다.',
+            data: [],
+          });
+        }
+
         // 가져온 데이터를 형식에 맞게 파싱하기
         const holiday = Object.values(holidayJson).map((data: HolidayJsonType) => {
           return {
