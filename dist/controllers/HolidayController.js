@@ -22,7 +22,7 @@ const getHoliday = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             yield new Promise(() => {
                 const holidayJson = parser.parse(body).response.body.items.item;
                 if (!holidayJson) {
-                    res.status(200).json({
+                    return res.status(200).json({
                         success: true,
                         message: '공휴일 데이터가 존재하지 않습니다.',
                         data: [],
